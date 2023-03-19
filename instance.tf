@@ -10,18 +10,18 @@ resource "aws_instance" "main" {
     "${aws_security_group.allow_all_outbound.id}",
   ]
 
-  tags {
+  tags = {
     Name = "CodeDeployDemo"
   }
 
   provisioner "remote-exec" {
     script = "./install_codedeploy_agent.sh"
-
-    connection {
+  }
+  connection {
       agent       = false
       type        = "ssh"
       user        = "ec2-user"
       private_key = "${file(var.private_key_path)}"
-    }
+      host     = self.public_ip
   }
 }
